@@ -1,8 +1,8 @@
 '
 '
 '
-'	C:\Users\Simulator\Documents\My Experiments\test3.ebs2
-'	Generated on: 5/22/2018	16:45:46
+'	C:\Users\Simulator\Documents\My Experiments\taskswitch.ebs2
+'	Generated on: 5/22/2018	16:42:58
 '
 '
 '	This experiment has been generated with E-Prime version: 2.0.10.242
@@ -35,11 +35,8 @@ Dim Display As DisplayDevice
 Dim Keyboard As KeyboardDevice
 Dim Mouse As MouseDevice
 Dim Sound As SoundDevice
+Dim SRBOX As SRBOXDevice
 Dim SessionProc As Procedure
-Dim SessionProc_nObject As Long
-Dim SessionProc_bCanExit As Boolean
-Dim SessionProc_theCollection As RteCollection
-Dim SessionProc_theInputObject As RteRunnableInputObject
 
 
 
@@ -157,43 +154,6 @@ Procedure_Timeline_FinishResume:
 	'	Label - Procedure_Timeline_Finish END
 	''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-	''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-	' We are processing any pending input masks.
-	' To prevent this code from being generated, set the Procedure object's
-	'.ProcessPendingInputMasks property to None.
-	'
-	' Loop until a condition allows us to complete this Procedure
-	Do
-		'Any requests for termination?
-		If GetTerminateMode() = ebTerminate Then
-			SetTerminateMode ebTerminateNone
-			SetNextTargetOnsetTime Clock.Read
-			Exit Do
-		ElseIf GetTerminateMode() = ebTerminateJump Then
-			SetTerminateMode ebTerminateNone
-			SetNextTargetOnsetTime Clock.Read
-			Err.Raise ebInputAccepted
-		End If
-
-		'NOTE: This Procedure is the root procedure in the Experiment Object.
-		'  No script generated here for Object.InputMasks.IsPending()
-
-		'Ready for the next object?
-		If Clock.Read >= (GetNextTargetOnsetTime() - 1) Then
-			Exit Do
-		End If
-
-		'Conditional Exit?
-		If GetConditionalExitState() <> 0 Then
-			Exit Do
-		End If
-
-		If GetNextTargetOnsetTime() - Clock.Read > 4 Then Sleep 4
-		DoEvents
-	Loop
-	'
-	''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-	
 
 	c.Log
 
@@ -380,6 +340,36 @@ Sub InitDevices(c As Context)
 		Sound.Open SoundSoundDeviceInfo
 	End If
 
+	Set SRBOX = New SRBoxDevice
+	SRBOX.Name = ebUCase_S & ebUCase_R & ebUCase_B & ebUCase_O & ebUCase_X
+
+	Dim SRBOXSRBoxDeviceInfo As SRBoxDeviceInfo
+	SRBOXSRBoxDeviceInfo.Model = 200
+	SRBOXSRBoxDeviceInfo.Revision = 1
+	SRBOXSRBoxDeviceInfo.CommPort = 3
+	SRBOXSRBoxDeviceInfo.BaudRate = 19200
+	SRBOXSRBoxDeviceInfo.CharacterRate = 800
+	SRBOXSRBoxDeviceInfo.Configuration = ebSRBoxConfigStandard
+	SRBOXSRBoxDeviceInfo.CollectionMode = ebPressesOnly
+	'Load values from context if they exist
+	If c.AttribExists(SRBOX.Name & ".Model") Then SRBOXSRBoxDeviceInfo.Model = CLng(c.GetAttrib(SRBOX.Name & ".Model"))
+	If c.AttribExists(SRBOX.Name & ".Revision") Then SRBOXSRBoxDeviceInfo.Revision = CLng(c.GetAttrib(SRBOX.Name & ".Revision"))
+	If c.AttribExists(SRBOX.Name & ".CommPort") Then SRBOXSRBoxDeviceInfo.CommPort = CLng(c.GetAttrib(SRBOX.Name & ".CommPort"))
+	If c.AttribExists(SRBOX.Name & ".BaudRate") Then SRBOXSRBoxDeviceInfo.BaudRate = CLng(c.GetAttrib(SRBOX.Name & ".BaudRate"))
+	If c.AttribExists(SRBOX.Name & ".CharacterRate") Then SRBOXSRBoxDeviceInfo.CharacterRate = CLng(c.GetAttrib(SRBOX.Name & ".CharacterRate"))
+	If c.AttribExists(SRBOX.Name & ".Configuration") Then SRBOXSRBoxDeviceInfo.Configuration = CLng(c.GetAttrib(SRBOX.Name & ".Configuration"))
+	If c.AttribExists(SRBOX.Name & ".Debounce") Then SRBOXSRBoxDeviceInfo.Debounce = CLng(c.GetAttrib(SRBOX.Name & ".Debounce"))
+	If c.AttribExists(SRBOX.Name & ".CollectionMode") Then SRBOXSRBoxDeviceInfo.CollectionMode = CLng(c.GetAttrib(SRBOX.Name & ".CollectionMode"))
+	If c.AttribExists(SRBOX.Name & ".EmulateDeviceName") Then SRBOXSRBoxDeviceInfo.EmulateDeviceName = c.GetAttrib(SRBOX.Name & ".EmulateDeviceName")
+	
+	'Open the device, unless the context values indicate otherwise
+	Dim SRBOXOpen As Boolean
+	SRBOXOpen = True
+	If c.AttribExists(SRBOX.Name & ".Open") Then SRBOXOpen = CLogical(c.GetAttrib(SRBOX.Name & ".Open"))
+	If SRBOXOpen = True Then
+		SRBOX.Open SRBOXSRBoxDeviceInfo
+	End If
+
 	'Init All Devices
 	Rte.DeviceManager.Init
 
@@ -423,13 +413,12 @@ Sub InitObjects(c As Context)
 
 	Set SessionProc = New Procedure
 	SessionProc.Name = ebUCase_S & ebLCase_e & ebLCase_s & ebLCase_s & ebLCase_i & ebLCase_o & ebLCase_n & ebUCase_P & ebLCase_r & ebLCase_o & ebLCase_c
-	'{C7D539E5-AA80-4AB3-88F2-1C1AAE488EBC}
-	SessionProc.Guid = CGuid(&HC7D539E5, &HAA80, &H4AB3, &H88F2, &H1C1AAE48, &H8EBC)
+	'{80E7ADAB-8D42-42E7-86E2-AFDCDB24ABB7}
+	SessionProc.Guid = CGuid(&H80E7ADAB, &H8D42, &H42E7, &H86E2, &HAFDCDB24, &HABB7)
 	SessionProc.Tag = ebEmptyText
 
 	SessionProc.LoadProperties
 	SessionProc.Subroutine = ebUCase_S & ebLCase_e & ebLCase_s & ebLCase_s & ebLCase_i & ebLCase_o & ebLCase_n & ebUCase_P & ebLCase_r & ebLCase_o & ebLCase_c & ebUnderscore & ebUCase_R & ebLCase_u & ebLCase_n
-Set SessionProc_theCollection = New RteCollection
 
 
 End Sub
@@ -493,6 +482,10 @@ Sub UnInitDevices()
 	Set Mouse = Nothing
 
 	Sound.Close
+
+	SRBOX.Close
+	Set SRBOX = Nothing
+
 End Sub
 
 
@@ -544,7 +537,7 @@ Sub Main()
 	c.SetLogLevelName 10, "LogLevel10"
 
 	' Set standard logging items
-	ebContext.SetAttrib "Experiment", "test3"
+	ebContext.SetAttrib "Experiment", "taskswitch"
 	ebContext.SetAttrib "SessionDate", Date$
 	ebContext.SetAttrib "SessionTime", Time$
 	ebContext.SetAttrib "SessionStartDateTimeUtc", NowUtc()
@@ -757,7 +750,7 @@ StartupInfoPrompt_Session:
 	c.SetAttrib "RuntimeVersionExpected", 2 & ebDot & 0 & ebDot & 10 & ebDot & 242
 
 	' Log experiment version
-	c.SetAttrib "ExperimentVersion", "1.0.0.12"
+	c.SetAttrib "ExperimentVersion", "1.0.0.32"
 
 	' ExperimentStart
 	 Rte.ExperimentStart
@@ -811,4 +804,3 @@ ExperimentAbort:
 	DestroyDefaultPort
 
 End Sub
-
